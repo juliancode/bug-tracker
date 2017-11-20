@@ -1,10 +1,8 @@
 import React from 'react';
 import Moment from 'moment';
+import { Button } from '../components';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import FileTextO from 'react-icons/lib/fa/file-text-o';
-import Check from 'react-icons/lib/fa/check';
-import Close from 'react-icons/lib/fa/close';
 import '../containers/App.css';
 
 const BugContainer = styled.div`
@@ -12,12 +10,10 @@ const BugContainer = styled.div`
         padding: 20px;
         margin-bottom: 30px;
 
-        .status_0 {
-
-        }
-
-        .status_1 {
-
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            margin-left: 20px;
         }
 
         .status_2 {
@@ -29,40 +25,6 @@ const BugContainer = styled.div`
         .main {
             display: flex;
             justify-content: space-between;
-            .buttons {
-                display: flex;
-                flex-direction: column;
-                margin-left: 20px;
-                .button {
-                    cursor: pointer;
-                    width: auto;
-                    padding: 10px 30px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: #fafafa;
-                    outline: none;
-                    text-align: center;
-                    margin-bottom: 10px;
-                    white-space: nowrap;
-                    &:hover {
-                        box-shadow: 0px 3px 7px rgba(0,0,0,0.25);
-                    }
-                    &.working {
-                        background: linear-gradient(#3b3e52, #343857);
-                    }
-                    &.complete {
-                        background: #63D5C3;
-                        background: linear-gradient(#63D5C3, #4fc2b7);
-                    }
-                    &.delete {
-                        background: linear-gradient(#C62828, #B71C1C);
-                    }
-                    .icon {
-                        margin-right: 5px;
-                    }
-                }
-            }
         }
 
         .details {
@@ -103,12 +65,9 @@ const Bug = ({ url, description, date_found, status, workingOn, completeBug, del
                         <div className="main">
                             <div className="description">{description}</div>
                             <div className="buttons">
-                                <a className="button working" onClick={e => workingOn(index, id)}>
-                                    <FileTextO className="icon" /> Working On</a>
-                                <a className="button complete" onClick={e => completeBug(index, id)}>
-                                    <Check className="icon" /> Completed</a>
-                                <a className="button delete" onClick={e => deleteBug(index, id)}>
-                                    <Close className="icon" /> Archive</a>
+                                <Button id={id} index={index} type={0}>Completed</Button>
+                                <Button id={id} index={index} type={1}>Working On</Button>
+                                <Button id={id} index={index} type={2}>Archive</Button>
                             </div>
                         </div>
                         <div className="details">
@@ -121,43 +80,47 @@ const Bug = ({ url, description, date_found, status, workingOn, completeBug, del
         case 1: // working on
             return (
                 <BugContainer>
-                <div className="status_1">
-                    <div className="main">
-                        <div className="description">{description}</div>
-                        <div className="buttons">
-                            <a className="button complete" onClick={e => completeBug(index, id)}>
-                                <Check className="icon" /> Completed</a>
-                            <a className="button delete" onClick={e => deleteBug(index, id)}>
-                                <Close className="icon" /> Archive</a>
+                    <div className="status_1">
+                        <div className="main">
+                            <div className="description">{description}</div>
+                            <div className="buttons">
+                                <Button id={id} index={index} type={0}>Completed</Button>
+                                <Button id={id} index={index} type={2}>Archive</Button>
+                            </div>
                         </div>
-                    </div>
-                    <div className="details">
-                        <div><a className="url" href="url">{url}</a></div>
-                        <div className="date" title={format_date}>{relative_date}</div>
-                    </div>
-                </div>     
-            </BugContainer>
+                        <div className="details">
+                            <div><a className="url" href="url">{url}</a></div>
+                            <div className="date" title={format_date}>{relative_date}</div>
+                        </div>
+                    </div>     
+                </BugContainer>
             );
         case 2: // completed
             return (
                 <BugContainer>
-                <div className="status_2">
-                    <div className="main">
-                        <div className="description">{description}</div>
-                        <div className="buttons">
-                            <a className="button delete" onClick={e => deleteBug(index, id)}>
-                                <Close className="icon" /> Archive</a>
+                    <div className="status_2">
+                        <div className="main">
+                            <div className="description">{description}</div>
+                            <div className="buttons">
+                                <Button id={id} index={index} type={2}>Archive</Button>
+                            </div>
                         </div>
-                    </div>
-                    <div className="details">
-                        <div><a className="url" href="url">{url}</a></div>
-                        <div className="date" title={format_date}>{relative_date}</div>
-                    </div>
-                </div>     
-            </BugContainer>
+                        <div className="details">
+                            <div><a className="url" href={url}>{url}</a></div>
+                            <div className="date" title={format_date}>{relative_date}</div>
+                        </div>
+                    </div>     
+                </BugContainer>
             );
         default: 
-            return null; 
+            return (
+                <BugContainer>
+                    <Button 
+                        type={status} workingOn={workingOn}                    >
+                    Sweg
+                    </Button>
+                </BugContainer>
+            ); 
     }
 }
 
@@ -168,6 +131,7 @@ Bug.propTypes = {
     workingOnBug: PropTypes.func,
     completeBug: PropTypes.func,
     index: PropTypes.number,
+    status: PropTypes.number,
     id: PropTypes.string
 }
 
