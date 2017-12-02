@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Form } from '../components';
+import { List, BugTrackerForm } from '../components';
 import ajax from 'superagent';
 import styled from 'styled-components';
 import './App.css';
@@ -19,24 +19,25 @@ class App extends React.Component {
         this.state = {
             bugs: [],
             form: {
-                url: "",
-                description: ""
+                url: '',
+                description: ''
             }
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.workingOnBug = this.workingOnBug.bind(this);        
+        this.workingOnBug = this.workingOnBug.bind(this);
         this.completeBug = this.completeBug.bind(this);
         this.deleteBug = this.deleteBug.bind(this);
+        this.filterBugs = this.filterBugs.bind(this);
     }
 
     componentWillMount() {
         ajax.get('http://localhost:3001/bugs')
-            .set("Content-Type", "application/json")
+            .set('Content-Type', 'application/json')
             .end((err, res) => {
                 if (err || !res.ok) {
-                    alert("Error getting bugs", res);
+                    alert('Error getting bugs', res);
                 } else {
                     this.setState({ bugs: res.body.reverse() });
                 }
@@ -44,16 +45,21 @@ class App extends React.Component {
     }
 
     handleChange(event) {
-        // form input change "controlled component"
-        this.setState({ form: { [event.target.name]: event.target.value }});
+        // form input change 'controlled component'
+        this.setState({
+            form: {
+                ...this.state.form,
+                [event.target.name]: event.target.value
+            }
+        })
     }
 
     handleSubmit(event) {
         // post the form information to the bugs api
         ajax.post('http://localhost:3001/bugs')
             .set('Content-Type', 'application/json')
-            .send({ 
-                url: this.state.form.url, 
+            .send({
+                url: this.state.form.url,
                 description: this.state.form.description,
                 status: 0
             })
@@ -61,51 +67,58 @@ class App extends React.Component {
                 if (err || !res.ok) {
                     alert(`Error: ${err}`);
                 } else {
-                    this.setState(prevState => { 
+                    this.setState(prevState => {
                         prevState.bugs = [res.body, ...prevState.bugs];
-                        console.log(prevState);
                         return prevState;
                     });
                 }
             });
         event.preventDefault();
     }
-    
+
+    filterBugs(filter) {
+        this.setState(prevState => {
+            prevState.bugs.filter(bug => {
+                return bug.status === filter;
+            });
+        });
+    }
+
     workingOnBug(index, bugId) {
         ajax.put(`http://localhost:3001/bugs/${bugId}`)
-        .set("Content-Type", "application/json")
-        .send({ status: 1 })
-        .end((err, res) => {
-            if (err || !res.ok) {
-                alert(`Error: ${err}`);
-            } else {
-                this.setState(prevState => {
-                    prevState.bugs[index].status = 1;
-                    return prevState;
-                });
-            }
-        });
+            .set('Content-Type', 'application/json')
+            .send({ status: 1 })
+            .end((err, res) => {
+                if (err || !res.ok) {
+                    alert(`Error: ${err}`);
+                } else {
+                    this.setState(prevState => {
+                        prevState.bugs[index].status = 1;
+                        return prevState;
+                    });
+                }
+            });
     }
-    
+
     completeBug(index, bugId) {
         ajax.put(`http://localhost:3001/bugs/${bugId}`)
-        .set("Content-Type", "application/json")
-        .send({ status: 2 })
-        .end((err, res) => {
-            if (err || !res.ok) {
-                alert(`Error: ${err}`);
-            } else {
-                this.setState(prevState => {
-                    prevState.bugs[index].status = 2;
-                    return prevState;
-                });
-            }
-        });
+            .set('Content-Type', 'application/json')
+            .send({ status: 2 })
+            .end((err, res) => {
+                if (err || !res.ok) {
+                    alert(`Error: ${err}`);
+                } else {
+                    this.setState(prevState => {
+                        prevState.bugs[index].status = 2;
+                        return prevState;
+                    });
+                }
+            });
     }
-      
+
     deleteBug(index, bugId) {
         ajax.delete(`http://localhost:3001/bugs/${bugId}`)
-            .set("Content-Type", "application/json")
+            .set('Content-Type', 'application/json')
             .end((err, res) => {
                 if (err || !res.ok) {
                     alert(`Error: ${err}`);
@@ -121,12 +134,11 @@ class App extends React.Component {
 
     render() {
         const { bugs, form } = this.state;
-        console.log(bugs, form.url)
         return (
-        <AppContainer>
-            <List bugs={bugs} completeBug={this.completeBug} workingOnBug={this.workingOnBug} deleteBug={this.deleteBug} />
-            <Form url={form.url} description={form.description} onChange={this.handleChange} onSubmit={this.handleSubmit} />
-        </AppContainer>
+            <AppContainer>
+                <List bugs={bugs} completeBug={this.completeBug} workingOnBug={this.workingOnBug} deleteBug={this.deleteBug} />
+                <BugTrackerForm url={form.url} description={form.description} changeEvent={this.handleChange} submitEvent={this.handleSubmit} />
+            </AppContainer>
         );
     }
 }

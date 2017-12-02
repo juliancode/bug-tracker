@@ -22,4 +22,4 @@ app.use((req, res) => {
 
 });
 
-console.log(`REST API Server started: http://localhost:${port}`);
+console.log(`REST API Server started: http://localhost:${port}!`);

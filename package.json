@@ -12,6 +12,7 @@
     "superagent": "^3.8.0"
   },
   "devDependencies": {
+    "eslint-config-strict": "^14.0.1",
     "react-scripts": "1.0.16"
   },
   "scripts": {
