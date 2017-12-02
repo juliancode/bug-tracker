@@ -6,9 +6,7 @@ const PLACEHOLDER = 'Enter URL the bug can be found at';
 
 const UrlInputContainer = styled.div``;
 
-const Label = ({ label }) => (
-  <label>{label}</label>
-);
+const Label = ({ label }) => <label>{label}</label>;
 
 const Input = ({ value, onChange }) => (
   <input

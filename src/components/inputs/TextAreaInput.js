@@ -6,9 +6,7 @@ const PLACEHOLDER = 'How did you come across this bug?';
 
 const TextAreaInputContainer = styled.div``;
 
-const Label = ({ label }) => (
-  <label>{label}</label>
-);
+const Label = ({ label }) => <label>{label}</label>;
 
 const TextArea = ({ value, onChange }) => (
   <textarea
