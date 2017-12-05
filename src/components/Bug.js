@@ -53,7 +53,7 @@ const BugContainer = styled.div`
     }
 `;
 
-const Bug = ({
+export const Bug = ({
   url,
   description,
   date_found,
@@ -183,5 +183,3 @@ Bug.propTypes = {
   status: PropTypes.number,
   id: PropTypes.string
 };
-
-export default Bug;

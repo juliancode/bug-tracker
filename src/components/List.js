@@ -1,5 +1,5 @@
 import React from 'react';
-import Bug from './Bug';
+import { Bug } from './Bug';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import '../containers/App.css';

@@ -153,7 +153,7 @@ class App extends React.Component {
         <BugTrackerForm
           url={form.url}
           description={form.description}
-          changeEvent={this.handleChange}
+          onChange={this.handleChange}
           submitEvent={this.handleSubmit}
         />
       </AppContainer>
