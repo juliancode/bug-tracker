@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, BugTrackerForm } from '../components';
+import { Main, BugTrackerForm } from '../components';
 import ajax from 'superagent';
 import styled from 'styled-components';
 import './App.css';
@@ -144,7 +144,7 @@ class App extends React.Component {
     const { bugs, form } = this.state;
     return (
       <AppContainer>
-        <List
+        <Main
           bugs={bugs}
           completeBug={this.completeBug}
           workingOnBug={this.workingOnBug}

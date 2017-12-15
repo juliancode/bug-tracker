@@ -3,25 +3,34 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import '../containers/App.css';
 
-const FilterContainer = styled.div`
+const Container = styled.ul`
   width: 100%;
   max-height: 100%;
-  overflow-y: auto;
-  padding: 40px 80px;
+  padding: 20px 80px;
 `;
 
-const Filter = () => {
+const Link = styled.li`
+  display: inline;
+  padding: 5px 10px;
+  color: grey;
+  &:hover {
+    border-bottom: 2px solid #63d5c3;
+    cursor: pointer;
+    color: black;
+  }
+`;
+
+export const Filter = () => {
   return (
-    <FilterContainer>
-      <div>one</div>
-      <div>two</div>
-      <div>three</div>
-    </FilterContainer>
+    <Container>
+      <Link>All</Link>
+      <Link>Worked On</Link>
+      <Link>Available</Link>
+      <Link>Solved</Link>
+    </Container>
   );
 };
 
 Filter.propTypes = {
   filterBugs: PropTypes.func
 };
-
-export default Filter;
